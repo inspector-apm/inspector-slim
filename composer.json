@@ -1,0 +1,37 @@
+{
+    "name": "inspector-apm/inspector-slim",
+    "description": "Simple Code Execution Monitoring for Slim applications.",
+    "keywords": ["monitoring", "php", "inspector", "slim"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Valerio Barbera",
+            "email": "valerio@inspector.dev"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "inspector-apm/inspector-php": "^3.7",
+        "psr/http-server-middleware": "^1.0",
+        "psr/container": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Inspector\\Slim\\": "src/"
+        }
+    },
+    "config": {
+        "preferred-install": "dist"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Inspector\\Slim\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+    }
+}
