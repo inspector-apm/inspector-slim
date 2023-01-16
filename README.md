@@ -14,7 +14,7 @@ Simple code execution monitoring for Slim framework based applications.
 ## Requirements
 
 - PHP >= 7.2.0
-- Laravel >= 4.x
+- Slim >= 4.x
 
 <a name="install"></a>
 
