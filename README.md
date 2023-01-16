@@ -30,9 +30,9 @@ composer require inspector-apm/inspector-slim
 
 ```php
 $container->set('inspector', function () {
-	$configuration = new \Inspector\Configuration('INSPECTOR_INGESTION_KEY');
+    $configuration = new \Inspector\Configuration('INSPECTOR_INGESTION_KEY');
 	
-    return new Inspector($configuration);
+	return new Inspector($configuration);
 });
 ```
 
