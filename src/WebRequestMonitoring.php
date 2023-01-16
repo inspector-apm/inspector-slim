@@ -44,6 +44,8 @@ class WebRequestMonitoring implements MiddlewareInterface
             $request->getMethod() . ' ' . $request->getUri()->getPath()
         );
 
+        $transaction->setResult($response->getStatusCode());
+
         return $response;
     }
 }
