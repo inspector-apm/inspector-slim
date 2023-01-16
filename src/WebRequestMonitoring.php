@@ -11,6 +11,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Slim\Routing\RouteContext;
 
 class WebRequestMonitoring implements MiddlewareInterface
 {
@@ -40,9 +41,16 @@ class WebRequestMonitoring implements MiddlewareInterface
     {
         $response = $handler->handle($request);
 
+        $routeContext = RouteContext::fromRequest($request);
+
         $transaction = $this->inspector->startTransaction(
-            $request->getMethod() . ' ' . $request->getUri()->getPath()
+            $request->getMethod() . ' ' . $routeContext->getRoute()->getPattern()
         );
+
+        $transaction->addContext('Request Body', $request->getBody())
+            ->addContext('Response', [
+                'headers' => $response->getHeaders(),
+            ]);
 
         $transaction->setResult($response->getStatusCode());
 

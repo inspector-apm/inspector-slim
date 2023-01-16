@@ -76,7 +76,56 @@ $app->get('/home', function () {
 })->add(\Inspector\Slim\WebRequestMonitoring::class);
 ```
 
-<a name="test"></a>
+<a name="segment"></a>
+
+## Add Segment
+
+You can add segments to the transaction's timeline from route functions:
+
+```php
+$app->get('/', function (Request $request, Response $response) {
+    /*
+     * Retrieve the inspector instance from the container.
+     */
+    $this->get('inspector')->addSegment(function () {
+        sleep(1);
+    }, 'sleep');
+        
+    return $response;
+});
+```
+
+If your routes are managed by controller you have to inject the container in the controller constructor:
+
+```php
+namespace App\Controllers;
+
+
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+
+class TestController
+{
+    protected $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    public function __invoke(Request $request, Response $response)
+    {
+        $this->container->get('inspector')->addSegment(function () {
+            sleep(1);
+        }, 'sleep');
+
+        $response->getBody()->write('Test route.');
+
+        return $response;
+    }
+}
+```
 
 ## Official documentation
 
