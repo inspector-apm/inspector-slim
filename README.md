@@ -11,6 +11,8 @@ Simple code execution monitoring for Slim framework based applications.
 - [Requirements](#requirements)
 - [Install](#install)
 - [Middleware](#middleware)
+- [Test](#test)
+- [Add Segment](#segment)
 - [Official Documentation](https://docs.inspector.dev/guides/slim)
 - [Contribution Guidelines](#contribution)
 
@@ -78,9 +80,23 @@ $app->add(\Inspector\Slim\WebRequestMonitoring::class);
 Or in specific routes:
 
 ```php
-$app->get('/home', function () {
+$app->get('/', function () {
     
     // your code here...
+    
+})->add(\Inspector\Slim\WebRequestMonitoring::class);
+```
+
+<a name="test"></a>
+
+## Test that everything works
+
+Create a test route and open it in the browser [http://localhost:8080](http://localhost:8080):
+
+```php
+$app->get('/test', function () {
+    
+    throw new \Exception('My First Exception.');
     
 })->add(\Inspector\Slim\WebRequestMonitoring::class);
 ```
