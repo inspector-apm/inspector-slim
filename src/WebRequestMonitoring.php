@@ -39,18 +39,23 @@ class WebRequestMonitoring implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $response = $handler->handle($request);
-
         $routeContext = RouteContext::fromRequest($request);
 
         $transaction = $this->inspector->startTransaction(
             $request->getMethod() . ' ' . $routeContext->getRoute()->getPattern()
-        );
+        )->addContext('Request Body', $request->getBody());
 
-        $transaction->addContext('Request Body', $request->getBody())
-            ->addContext('Response', [
-                'headers' => $response->getHeaders(),
-            ]);
+        try {
+            $response = $handler->handle($request);
+        } catch (\Throwable $exception) {
+            $this->inspector->reportException($exception, false);
+            $transaction->setResult(500);
+            throw $exception;
+        }
+
+        $transaction->addContext('Response', [
+            'headers' => $response->getHeaders(),
+        ]);
 
         $transaction->setResult($response->getStatusCode());
 
