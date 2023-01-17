@@ -32,7 +32,8 @@ composer require inspector-apm/inspector-slim
 ```
 
 ### Register On Container
-Consider to use environment variables to store your project's INGESTION KEY:
+First you have to register the Inspector instance inside the application container 
+in order to make the monitoring agent available within the application.
 
 ```php
 $container->set('inspector', function () {
@@ -41,6 +42,8 @@ $container->set('inspector', function () {
     return new Inspector($configuration);
 });
 ```
+
+Consider to use [environment variables](https://github.com/vlucas/phpdotenv) to store your project's INGESTION KEY.
 
 If you are using a Slim 4 skeleton you can add a new container definition in `app/dependencies.php` file:
 
