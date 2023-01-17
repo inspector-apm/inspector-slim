@@ -27,12 +27,13 @@ composer require inspector-apm/inspector-slim
 ```
 
 ### Register On Container
+Consider to use environment variables to store your project's INGESTION KEY:
 
 ```php
 $container->set('inspector', function () {
     $configuration = new \Inspector\Slim\Configuration('INSPECTOR_INGESTION_KEY');
-	
-	return new Inspector($configuration);
+    
+    return new Inspector($configuration);
 });
 ```
 
@@ -71,7 +72,7 @@ Or in specific routes:
 ```php
 $app->get('/home', function () {
     
-    // do something...
+    // your code here...
     
 })->add(\Inspector\Slim\WebRequestMonitoring::class);
 ```
@@ -88,14 +89,17 @@ $app->get('/', function (Request $request, Response $response) {
      * Retrieve the inspector instance from the container.
      */
     $this->get('inspector')->addSegment(function () {
+    
+        // Your code here...
         sleep(1);
+        
     }, 'sleep');
         
     return $response;
 });
 ```
 
-If your routes are managed by controller you have to inject the container in the controller constructor:
+If your routes are organized using controllers you need to inject the container in the controller constructor:
 
 ```php
 namespace App\Controllers;
@@ -109,6 +113,9 @@ class TestController
 {
     protected $container;
 
+    /**
+     * Inject the container to retrieve the inspector instance later.
+     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -116,8 +123,12 @@ class TestController
 
     public function __invoke(Request $request, Response $response)
     {
+        // Retrieve the inspector instance from the container.
         $this->container->get('inspector')->addSegment(function () {
+        
+            // Your code here...
             sleep(1);
+            
         }, 'sleep');
 
         $response->getBody()->write('Test route.');
